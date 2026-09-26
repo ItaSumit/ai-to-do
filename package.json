@@ -1,0 +1,13 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "A simple to-do list app for Claude Code Lab 101",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/todo.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
