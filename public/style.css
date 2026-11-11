@@ -31,14 +31,42 @@ h1 {
   font-size: 0.9rem;
 }
 
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-tabs button {
+  padding: 6px 14px;
+  background: white;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.filter-tabs button:hover {
+  background: #f0f0f0;
+}
+
+.filter-tabs button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
 #add-form {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 24px;
 }
 
 #new-todo {
-  flex: 1;
+  flex: 1 1 140px;
+  min-width: 0;
   padding: 10px 14px;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -91,6 +119,17 @@ h1 {
   color: #999;
 }
 
+.todo-item.overdue {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.due-date {
+  font-size: 0.8rem;
+  color: #888;
+  white-space: nowrap;
+}
+
 .todo-item .delete-btn {
   background: none;
   border: none;
@@ -102,4 +141,24 @@ h1 {
 
 .todo-item .delete-btn:hover {
   color: #ef4444;
+}
+
+.priority-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.priority-low {
+  background: #16a34a;
+}
+
+.priority-medium {
+  background: #ea580c;
+}
+
+.priority-high {
+  background: #dc2626;
 }
