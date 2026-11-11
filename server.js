@@ -7,14 +7,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory todo storage
 let todos = [
-  { id: 1, text: 'Review pull request', completed: false },
-  { id: 2, text: 'Write unit tests', completed: true },
-  { id: 3, text: 'Update documentation', completed: false },
-  { id: 4, text: 'Fix login bug', completed: false },
-  { id: 5, text: 'Deploy to staging', completed: true },
+  { id: 1, text: 'Review pull request', completed: false, priority: 'Medium' },
+  { id: 2, text: 'Write unit tests', completed: true, priority: 'Medium' },
+  { id: 3, text: 'Update documentation', completed: false, priority: 'Medium' },
+  { id: 4, text: 'Fix login bug', completed: false, priority: 'Medium' },
+  { id: 5, text: 'Deploy to staging', completed: true, priority: 'Medium' },
 ];
 
 let nextId = 6;
+
+const PRIORITIES = ['Low', 'Medium', 'High'];
 
 // GET all todos
 app.get('/api/todos', (req, res) => {
@@ -30,11 +32,14 @@ app.get('/api/stats', (req, res) => {
 
 // POST a new todo
 app.post('/api/todos', (req, res) => {
-  const { text } = req.body;
+  const { text, priority = 'Medium' } = req.body;
   if (!text || !text.trim()) {
     return res.status(400).json({ error: 'Text is required' });
   }
-  const todo = { id: nextId++, text: text.trim(), completed: false };
+  if (!PRIORITIES.includes(priority)) {
+    return res.status(400).json({ error: 'Priority must be one of Low, Medium, High' });
+  }
+  const todo = { id: nextId++, text: text.trim(), completed: false, priority };
   todos.push(todo);
   res.status(201).json(todo);
 });

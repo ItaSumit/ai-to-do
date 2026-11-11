@@ -1,6 +1,7 @@
 const todoList = document.getElementById('todo-list');
 const addForm = document.getElementById('add-form');
 const newTodoInput = document.getElementById('new-todo');
+const prioritySelect = document.getElementById('priority-select');
 const activeCount = document.getElementById('active-count');
 
 async function loadTodos() {
@@ -25,6 +26,10 @@ function renderTodos(todos) {
     text.className = 'text';
     text.textContent = todo.text;
 
+    const badge = document.createElement('span');
+    badge.className = `priority-badge priority-${todo.priority.toLowerCase()}`;
+    badge.textContent = todo.priority;
+
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'delete-btn';
     deleteBtn.textContent = '\u00d7';
@@ -32,6 +37,7 @@ function renderTodos(todos) {
 
     li.appendChild(checkbox);
     li.appendChild(text);
+    li.appendChild(badge);
     li.appendChild(deleteBtn);
     todoList.appendChild(li);
   });
@@ -61,7 +67,7 @@ addForm.addEventListener('submit', async (e) => {
   await fetch('/api/todos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, priority: prioritySelect.value }),
   });
 
   newTodoInput.value = '';
