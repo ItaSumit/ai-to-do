@@ -103,3 +103,23 @@ h1 {
 .todo-item .delete-btn:hover {
   color: #ef4444;
 }
+
+.priority-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.priority-low {
+  background: #16a34a;
+}
+
+.priority-medium {
+  background: #ea580c;
+}
+
+.priority-high {
+  background: #dc2626;
+}
