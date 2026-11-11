@@ -91,6 +91,17 @@ h1 {
   color: #999;
 }
 
+.todo-item.overdue {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.due-date {
+  font-size: 0.8rem;
+  color: #888;
+  white-space: nowrap;
+}
+
 .todo-item .delete-btn {
   background: none;
   border: none;

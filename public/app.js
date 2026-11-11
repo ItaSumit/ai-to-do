@@ -1,7 +1,25 @@
 const todoList = document.getElementById('todo-list');
 const addForm = document.getElementById('add-form');
 const newTodoInput = document.getElementById('new-todo');
+const dueDateInput = document.getElementById('due-date-input');
 const activeCount = document.getElementById('active-count');
+
+// Parse YYYY-MM-DD as a local date; new Date(string) would treat it as UTC
+function parseDueDate(dueDate) {
+  const [year, month, day] = dueDate.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function formatDueDate(dueDate) {
+  return parseDueDate(dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function isOverdue(todo) {
+  if (!todo.dueDate || todo.completed) return false;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return parseDueDate(todo.dueDate) < today;
+}
 
 async function loadTodos() {
   const res = await fetch('/api/todos');
@@ -15,6 +33,7 @@ function renderTodos(todos) {
   todos.forEach(todo => {
     const li = document.createElement('li');
     li.className = todo.completed ? 'todo-item completed' : 'todo-item';
+    if (isOverdue(todo)) li.classList.add('overdue');
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -32,6 +51,12 @@ function renderTodos(todos) {
 
     li.appendChild(checkbox);
     li.appendChild(text);
+    if (todo.dueDate) {
+      const dueDate = document.createElement('span');
+      dueDate.className = 'due-date';
+      dueDate.textContent = `Due: ${formatDueDate(todo.dueDate)}`;
+      li.appendChild(dueDate);
+    }
     li.appendChild(deleteBtn);
     todoList.appendChild(li);
   });
@@ -61,10 +86,11 @@ addForm.addEventListener('submit', async (e) => {
   await fetch('/api/todos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, dueDate: dueDateInput.value || null }),
   });
 
   newTodoInput.value = '';
+  dueDateInput.value = '';
   loadTodos();
 });
 

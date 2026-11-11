@@ -7,11 +7,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory todo storage
 let todos = [
-  { id: 1, text: 'Review pull request', completed: false },
-  { id: 2, text: 'Write unit tests', completed: true },
-  { id: 3, text: 'Update documentation', completed: false },
-  { id: 4, text: 'Fix login bug', completed: false },
-  { id: 5, text: 'Deploy to staging', completed: true },
+  { id: 1, text: 'Review pull request', completed: false, dueDate: null },
+  { id: 2, text: 'Write unit tests', completed: true, dueDate: null },
+  { id: 3, text: 'Update documentation', completed: false, dueDate: null },
+  { id: 4, text: 'Fix login bug', completed: false, dueDate: null },
+  { id: 5, text: 'Deploy to staging', completed: true, dueDate: null },
 ];
 
 let nextId = 6;
@@ -30,11 +30,17 @@ app.get('/api/stats', (req, res) => {
 
 // POST a new todo
 app.post('/api/todos', (req, res) => {
-  const { text } = req.body;
+  const { text, dueDate } = req.body;
   if (!text || !text.trim()) {
     return res.status(400).json({ error: 'Text is required' });
   }
-  const todo = { id: nextId++, text: text.trim(), completed: false };
+  const trimmedDueDate = typeof dueDate === 'string' ? dueDate.trim() : '';
+  const todo = {
+    id: nextId++,
+    text: text.trim(),
+    completed: false,
+    dueDate: /^\d{4}-\d{2}-\d{2}$/.test(trimmedDueDate) ? trimmedDueDate : null,
+  };
   todos.push(todo);
   res.status(201).json(todo);
 });
