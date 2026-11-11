@@ -3,12 +3,26 @@ const addForm = document.getElementById('add-form');
 const newTodoInput = document.getElementById('new-todo');
 const prioritySelect = document.getElementById('priority-select');
 const activeCount = document.getElementById('active-count');
+const filterButtons = document.querySelectorAll('.filter-tabs button');
+
+let allTodos = [];
+let currentFilter = 'all';
 
 async function loadTodos() {
   const res = await fetch('/api/todos');
-  const todos = await res.json();
-  renderTodos(todos);
+  allTodos = await res.json();
+  applyFilter();
   updateStats();
+}
+
+function applyFilter() {
+  let visible = allTodos;
+  if (currentFilter === 'active') {
+    visible = allTodos.filter(todo => !todo.completed);
+  } else if (currentFilter === 'completed') {
+    visible = allTodos.filter(todo => todo.completed);
+  }
+  renderTodos(visible);
 }
 
 function renderTodos(todos) {
@@ -72,6 +86,14 @@ addForm.addEventListener('submit', async (e) => {
 
   newTodoInput.value = '';
   loadTodos();
+});
+
+filterButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    currentFilter = button.dataset.filter;
+    filterButtons.forEach(b => b.classList.toggle('active', b === button));
+    applyFilter();
+  });
 });
 
 // Load todos on page load

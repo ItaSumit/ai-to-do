@@ -31,6 +31,32 @@ h1 {
   font-size: 0.9rem;
 }
 
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-tabs button {
+  padding: 6px 14px;
+  background: white;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.filter-tabs button:hover {
+  background: #f0f0f0;
+}
+
+.filter-tabs button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
 #add-form {
   display: flex;
   gap: 8px;
